@@ -39,44 +39,6 @@ router.get('/seed', (req, res) => {
         }))
 })
 
-
-
-// Show:
-router.get('/:id', (req, res) => {
-    Book.findById(req.parms.id)
-        .then(foundBook => {
-            res.json(foundBook)
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(400).send('Bad Request')
-            res.json(
-                {
-                    errCode: '404',
-                    errMessage: 'invalid Input'
-                }
-            )
-        })
-})
-
-// edit
-router.put('/books/:id', (req , res) =>{
-    Book.findByIdAndUpdate(req.params.id, req.body)
-    .then((updatedBook)=>{
-        res.json(updatedBook)
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(400).send('Bad Request')
-        res.json(
-            {
-                errCode: '404',
-                errMessage: 'invalid Input'
-            }
-        )
-    })
-})
-
 // Index:
 router.get('/', (req, res) => {
     Book.find()
@@ -93,13 +55,30 @@ router.get('/', (req, res) => {
         })
 })
 
+// Show:
+router.get('/:id', (req, res) => {
+    Book.findById(req.params.id)
+        .then(foundBook => {
+            res.json(foundBook)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).send('Bad Request')
+            res.json(
+                {
+                    errCode: '404',
+                    errMessage: 'invalid Input'
+                }
+            )
+        })
+})
 
 // new
-router.post('/books', (req, res)=>{
+router.post('/', (req, res)=>{
     Book.create(req.body)
     .then((createdBook)=>{
         res.json(createdBook)
-        req.redirect('/books')
+        
     })
     .catch(err => {
         console.log(err)
@@ -113,9 +92,29 @@ router.post('/books', (req, res)=>{
     })
 })
 
+// edit
+router.put('/:id', (req , res) =>{
+    Book.findByIdAndUpdate(req.params.id, req.body)
+    .then((updatedBook)=>{
+        res.json(updatedBook)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(400).send('Bad Request')
+        res.json(
+            {
+                errCode: '404',
+                errMessage: 'invalid Input'
+            }
+        )
+    })
+})
+
+
+
 // delete
 
-router.delete('/books/:id', (req,res)=>{
+router.delete('/:id', (req,res)=>{
     Book.findByIdAndDelete(req.params.id)
     .then(book=>{
         req.redirect('/books')
